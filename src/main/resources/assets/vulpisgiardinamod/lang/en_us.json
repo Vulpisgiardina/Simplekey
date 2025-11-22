@@ -1,0 +1,13 @@
+{
+  "itemGroup.vulpisgiardinamod": "Example Mod Tab",
+  "block.vulpisgiardinamod.example_block": "Example Block",
+  "item.vulpisgiardinamod.example_item": "Example Item",
+
+  "vulpisgiardinamod.configuration.title": "Vulpisgiardina Mod Configs",
+  "vulpisgiardinamod.configuration.section.vulpisgiardinamod.common.toml": "Vulpisgiardina Mod Configs",
+  "vulpisgiardinamod.configuration.section.vulpisgiardinamod.common.toml.title": "Vulpisgiardina Mod Configs",
+  "vulpisgiardinamod.configuration.items": "Item List",
+  "vulpisgiardinamod.configuration.logDirtBlock": "Log Dirt Block",
+  "vulpisgiardinamod.configuration.magicNumberIntroduction": "Magic Number Text",
+  "vulpisgiardinamod.configuration.magicNumber": "Magic Number"
+}
