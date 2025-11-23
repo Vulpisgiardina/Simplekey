@@ -1,25 +1,31 @@
 
-Installation information
+Simplekey MOD
 =======
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+A Mod for Minecraft 1.21.10
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+Introduction
+=======
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+鍵や鍵付きドアを追加します。<br>
+Mod開発の練習用に作成したModです。
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+[使い方](./docs/howtouse.md)
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+Environment
+=======
+
+* Minecraft 1.21.10
+* NeoForge 21.10.53-beta
+
+## Licenses
+
+Code: All Rights Reserved
+
+* このModは、自由にMod packに同梱することができます。
+* このModを導入したゲームプレイ映像については、収益化を含めて自由に公開することができます。
+
+## 免責事項
+
+このModの使用その他によって生じる、いかなる損害についても、作者は一切の責任を負いません。
+自己責任で導入してください。

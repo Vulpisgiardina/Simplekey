@@ -24,7 +24,6 @@ public class SimplekeyModClient {
 
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
-        // Some client setup code
         Simplekey.LOGGER.info("HELLO FROM CLIENT SETUP");
         Simplekey.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
     }

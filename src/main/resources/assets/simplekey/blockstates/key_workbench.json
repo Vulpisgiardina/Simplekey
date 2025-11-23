@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "simplekey:block/key_workbench"
+    }
+  }
+}

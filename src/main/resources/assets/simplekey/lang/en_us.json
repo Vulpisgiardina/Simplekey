@@ -1,0 +1,11 @@
+{
+  "item.simplekey.key_item": "key",
+  "item.simplekey.key_tool": "key tool",
+  "block.simplekey.key_workbench": "key workbench",
+  "block.simplekey.key_door": "keyed door",
+  "itemGroup.simplekey.lock_and_key": "Lock and Key",
+  "message.simplekey.wrong_key": "The key is wrong!",
+  "gui.simplekey.key_door.title": "key code setting",
+  "container.simplekey.key_workbench": "key workbench",
+  "container.simplekey.key_edit": "key code setting・naming"
+}
