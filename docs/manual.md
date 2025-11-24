@@ -16,7 +16,7 @@
 ![keydoor](./image/keydoor0.png)  
 鍵用工具を持った状態で右クリックすると、GUIが開きます。  
 ![keydoor GUI](./image/keydoor1.png)  
-任意の番号を設定し、「決定」を押します。  
+任意の番号を設定し、「完了」を押します。  
 ![keydoor GUI](./image/keydoor2.png)
 
 次に対応する鍵を作ります。  
