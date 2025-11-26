@@ -8,9 +8,12 @@
 * 鍵用工具
 * 鍵用作業台
 * 鍵付きドア
+* パスワードドア
 
 使い方
 =======
+
+## 鍵付きドア
 
 鍵付きドアを設置します。  
 ![keydoor](./image/keydoor0.png)  
@@ -30,3 +33,17 @@
 ![keydoor open](./image/keydoor_open.png)
 
 閉じるときは鍵は必要ありません。
+
+## パスワードドア
+
+パスワードドアを設置します。  
+![passworddoor](./image/passworddoor0.png)  
+鍵用工具を持った状態で右クリックすると、パスワード設定画面が開きます。  
+任意の番号を設定し、「完了」を押します。  
+![passworddoor GUI](./image/passworddoor1.png)  
+鍵用工具を持たずに右クリックすると、パスワード入力画面が開きます。  
+![passworddoor GUI](./image/passworddoor2.png)  
+正しいパスワードを入力してENTERを押すと、ドアが開きます。  
+![passworddoor_open](./image/passworddoor_open.png)
+
+閉じるときはパスワード入力はしません。
