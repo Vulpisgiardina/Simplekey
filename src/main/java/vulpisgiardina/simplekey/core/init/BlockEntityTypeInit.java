@@ -6,6 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import vulpisgiardina.simplekey.block.entity.PasswordDoorBlockEntity;
 
 import java.util.function.Supplier;
 
@@ -17,6 +18,13 @@ public class BlockEntityTypeInit {
             () -> new BlockEntityType<>(
                     KeyDoorBlockEntity::new,
                     BlockInit.KEY_DOOR.get()
+            ));
+
+    public static final Supplier<BlockEntityType<PasswordDoorBlockEntity>> PASSWORD_DOOR_BLOCK_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "password_door",
+            () -> new BlockEntityType<>(
+                    PasswordDoorBlockEntity::new,
+                    BlockInit.PASSWORD_DOOR.get()
             ));
 
     public static void register(IEventBus eventBus) {

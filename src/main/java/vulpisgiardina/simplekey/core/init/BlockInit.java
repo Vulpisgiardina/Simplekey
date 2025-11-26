@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.*;
+import vulpisgiardina.simplekey.block.PasswordDoorBlock;
 
 import java.util.function.Function;
 
@@ -53,6 +54,26 @@ public class BlockInit {
                             .useBlockDescriptionPrefix()
             ));
 
+    // パスワードドアの登録
+    public static final DeferredBlock<PasswordDoorBlock> PASSWORD_DOOR = BLOCKS.register(
+            "password_door",
+            registryName -> new PasswordDoorBlock(BlockSetType.IRON, BlockBehaviour.Properties.of()
+                    .setId(ResourceKey.create(Registries.BLOCK, registryName))
+                    .mapColor(MapColor.METAL)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.0F)
+                    .sound(SoundType.METAL)
+                    .noOcclusion()
+            ));
+    public static final DeferredItem<BlockItem> PASSWORD_DOOR_ITEM = ItemInit.ITEMS.register(
+            "password_door",
+            registryName -> new BlockItem(
+                    PASSWORD_DOOR.get(),
+                    new Item.Properties()
+                            .setId(ResourceKey.create(Registries.ITEM, registryName))
+                            .component(DataComponentInit.PASSWORD.get(), "0000")
+                            .useBlockDescriptionPrefix()
+            ));
 
     // ブロックを登録し、対応するアイテムも自動で登録するヘルパーメソッド
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Function<ResourceLocation, ? extends T> func) {

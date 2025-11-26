@@ -1,9 +1,5 @@
 package vulpisgiardina.simplekey.block;
 
-import vulpisgiardina.simplekey.core.init.BlockEntityTypeInit;
-import vulpisgiardina.simplekey.core.init.DataComponentInit;
-import vulpisgiardina.simplekey.core.init.ItemInit;
-import vulpisgiardina.simplekey.menu.KeyDoorMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -22,7 +18,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.DoorHingeSide;
@@ -31,11 +26,15 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import vulpisgiardina.simplekey.core.init.BlockEntityTypeInit;
+import vulpisgiardina.simplekey.core.init.DataComponentInit;
+import vulpisgiardina.simplekey.core.init.ItemInit;
+import vulpisgiardina.simplekey.menu.PasswordDoorMenu;
 
 import javax.annotation.Nullable;
 
-public class KeyDoorBlock extends DoorBlock implements EntityBlock {
-    public KeyDoorBlock(BlockSetType blockSetType, BlockBehaviour.Properties properties) {
+public class PasswordDoorBlock extends DoorBlock implements EntityBlock {
+    public PasswordDoorBlock(BlockSetType blockSetType, Properties properties) {
         super(blockSetType, properties);
     }
 
@@ -60,6 +59,15 @@ public class KeyDoorBlock extends DoorBlock implements EntityBlock {
             return InteractionResult.PASS;
         }
 
+        // 他のプレイヤーがGUIを開いている
+        if (!level.isClientSide()) {
+            if (isSomeoneUsing(level, lowerPos)) {
+                // 使用中なら警告メッセージを出して終了
+                player.displayClientMessage(Component.translatable("message.simplekey.password_door.busy"), true);
+                return InteractionResult.SUCCESS; // 処理をここで終える
+            }
+        }
+
         ItemStack heldItem = player.getItemInHand(hand);
 
         // 鍵用工具を持っている
@@ -67,49 +75,40 @@ public class KeyDoorBlock extends DoorBlock implements EntityBlock {
             if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 // player.displayClientMessage(Component.literal("No GUI"), false);
                 BlockEntity be = level.getBlockEntity(lowerPos);
+                boolean isEditable = true;
                 if (be != null) {
                     serverPlayer.openMenu(new SimpleMenuProvider(
-                            (containerId, playerInventory, p) -> new KeyDoorMenu(containerId, playerInventory, level, lowerPos),
-                            Component.translatable("gui.simplekey.key_door.title")
+                            (containerId, playerInventory, p) -> new PasswordDoorMenu(containerId, playerInventory, level, lowerPos, isEditable),
+                            Component.translatable("gui.simplekey.password_door.setting.title")
                     ), friendlyByteBuf -> {
                         friendlyByteBuf.writeBlockPos(lowerPos);
-                        friendlyByteBuf.writeInt(be.components().getOrDefault(DataComponentInit.KEYCODE, 0));
+                        friendlyByteBuf.writeUtf(be.components().getOrDefault(DataComponentInit.PASSWORD, "0000"));
+                        friendlyByteBuf.writeBoolean(isEditable);
                     });
                 }
-                /*
-                MenuProvider menuProvider = new SimpleMenuProvider(
-                        (containerId, playerInventory, p) -> new KeyDoorMenu(containerId, playerInventory, level, pos),
-                        Component.translatable("gui.simplekey.key_door.title")
-                );
-                serverPlayer.openMenu(menuProvider, friendlyByteBuf -> friendlyByteBuf.writeBlockPos(pos));
-                 */
             }
             return InteractionResult.SUCCESS;
         }
 
-        // 鍵を持っている
-        if (heldItem.is(ItemInit.KEY_ITEM)) {
-            if (!level.isClientSide()) {
-                BlockEntity blockEntity = level.getBlockEntity(lowerPos);
-                if (blockEntity != null) {
-                    Integer doorCode = blockEntity.components().getOrDefault(DataComponentInit.KEYCODE, 0);
-                    Integer keyCode = heldItem.getComponents().getOrDefault(DataComponentInit.KEYCODE, -1);
-
-                    if (doorCode.equals(keyCode)) {
-                        state = state.cycle(OPEN);
-                        level.setBlock(pos, state, 10);
-                        // this.playSound(player, level, pos, state.getValue(OPEN));
-                        level.playSound(null, pos, this.type().doorOpen(), SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
-                        level.gameEvent(player, GameEvent.BLOCK_OPEN, pos);
-                    } else {
-                        player.displayClientMessage(Component.translatable("message.simplekey.wrong_key"), true);
-                    }
+        // 鍵用工具を持っていない
+        else {
+            if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                BlockEntity be = level.getBlockEntity(lowerPos);
+                boolean isEditable = false;
+                if (be != null) {
+                    serverPlayer.openMenu(new SimpleMenuProvider(
+                            (containerId, playerInventory, p) -> new PasswordDoorMenu(containerId, playerInventory, level, lowerPos, isEditable),
+                            Component.translatable("gui.simplekey.password_door.input.title")
+                    ), friendlyByteBuf -> {
+                        friendlyByteBuf.writeBlockPos(lowerPos);
+                        friendlyByteBuf.writeUtf(be.components().getOrDefault(DataComponentInit.PASSWORD, "0000"));
+                        friendlyByteBuf.writeBoolean(isEditable);
+                    });
                 }
             }
             return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.PASS;
     }
 
     private void playSound(@Nullable Entity source, Level level, BlockPos pos, boolean isOpening) {
@@ -135,10 +134,9 @@ public class KeyDoorBlock extends DoorBlock implements EntityBlock {
         BlockPos blockpos = context.getClickedPos();
         Level level = context.getLevel();
         if (blockpos.getY() < level.getMaxY() - 1 && level.getBlockState(blockpos.above()).canBeReplaced(context)) {
-            // ★ 元のコードにあった信号チェック(hasNeighborSignal)を削除
             return this.defaultBlockState()
                     .setValue(FACING, context.getHorizontalDirection())
-                    .setValue(HINGE, this.getHinge(context)) // このメソッドはprivateなので、次のステップでコピーします
+                    .setValue(HINGE, this.getHinge(context)) // このメソッドはprivateなので、次のステップでコピー
                     .setValue(POWERED, false) // 常にfalse
                     .setValue(OPEN, false)    // 常にfalse
                     .setValue(HALF, DoubleBlockHalf.LOWER);
@@ -150,7 +148,7 @@ public class KeyDoorBlock extends DoorBlock implements EntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return BlockEntityTypeInit.KEY_DOOR_BLOCK_ENTITY.get().create(pos, state);
+        return BlockEntityTypeInit.PASSWORD_DOOR_BLOCK_ENTITY.get().create(pos, state);
     }
 
     private DoorHingeSide getHinge(BlockPlaceContext context) {
@@ -190,5 +188,19 @@ public class KeyDoorBlock extends DoorBlock implements EntityBlock {
         } else {
             return DoorHingeSide.RIGHT;
         }
+    }
+
+    private boolean isSomeoneUsing(Level level, BlockPos pos) {
+        // サーバー側の全プレイヤーをループして確認
+        for (Player player : level.players()) {
+            // プレイヤーが開いているメニューが PasswordDoorMenu かどうか
+            if (player.containerMenu instanceof PasswordDoorMenu menu) {
+                // そのメニューが紐づいている座標が、今のドアの座標と同じか
+                if (menu.blockPos.equals(pos)) {
+                    return true; // 誰かが使っている
+                }
+            }
+        }
+        return false; // 誰も使っていない
     }
 }

@@ -20,6 +20,13 @@ public class DataComponentInit {
                     .networkSynchronized(ByteBufCodecs.INT)
     );
 
+    public static final Supplier<DataComponentType<String>> PASSWORD = DATA_COMPONENTS.registerComponentType(
+            "password",
+            builder -> builder
+                    .persistent(Codec.STRING)
+                    .networkSynchronized(ByteBufCodecs.STRING_UTF8)
+    );
+
     public static void register(IEventBus eventBus) {
         DATA_COMPONENTS.register(eventBus);
     }

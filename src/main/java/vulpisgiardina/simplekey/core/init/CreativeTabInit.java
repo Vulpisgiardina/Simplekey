@@ -22,6 +22,7 @@ public class CreativeTabInit {
                         output.accept(ItemInit.KEY_TOOL.get());
                         output.accept(BlockInit.KEY_WORKBENCH.get());
                         output.accept(BlockInit.KEY_DOOR.get());
+                        output.accept(BlockInit.PASSWORD_DOOR.get());
                     })
                     .build());
 

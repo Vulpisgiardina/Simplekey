@@ -3,6 +3,7 @@ package vulpisgiardina.simplekey.core.init;
 import vulpisgiardina.simplekey.Simplekey;
 import vulpisgiardina.simplekey.menu.KeyDoorMenu;
 import vulpisgiardina.simplekey.menu.KeyWorkbenchMenu;
+import vulpisgiardina.simplekey.menu.PasswordDoorMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
@@ -22,6 +23,11 @@ public class MenuInit {
     public static final Supplier<MenuType<KeyWorkbenchMenu>> KEY_WORKBENCH_MENU = MENU.register(
             "key_workbench",
             () -> IMenuTypeExtension.create(KeyWorkbenchMenu::new));
+
+    public static final Supplier<MenuType<PasswordDoorMenu>> PASSWORD_DOOR_MENU = MENU.register(
+            "password_door",
+            () -> IMenuTypeExtension.create(PasswordDoorMenu::new)
+    );
 
     public static void register(IEventBus eventBus) {
         MENU.register(eventBus);

@@ -2,6 +2,7 @@ package vulpisgiardina.simplekey.event;
 
 import vulpisgiardina.simplekey.Simplekey;
 import vulpisgiardina.simplekey.client.screen.KeyWorkbenchScreen;
+import vulpisgiardina.simplekey.client.screen.PasswordDoorScreen;
 import vulpisgiardina.simplekey.core.init.MenuInit;
 import vulpisgiardina.simplekey.client.screen.KeyDoorScreen;
 import net.neoforged.api.distmarker.Dist;
@@ -16,5 +17,6 @@ public class ClientSetup {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(MenuInit.KEY_DOOR_MENU.get(), KeyDoorScreen::new);
         event.register(MenuInit.KEY_WORKBENCH_MENU.get(), KeyWorkbenchScreen::new);
+        event.register(MenuInit.PASSWORD_DOOR_MENU.get(), PasswordDoorScreen::new);
     }
 }
